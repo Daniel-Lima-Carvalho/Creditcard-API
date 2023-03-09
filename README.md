@@ -59,8 +59,14 @@ Linux
 Windows
      
         python manage.py runserver 0.0.0.0:8000
-        
 
+7 - Create API Token.
+
+- Enter in the root link
+- Login with your created user
+- Go to AUTH TOKEN > Tokens > ADD TOKEN
+- Choose the user and created your API Token
+        
 ## 🟢 GET - List creditcards
 
 ###### Request Path
