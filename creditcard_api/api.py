@@ -1,6 +1,9 @@
 
+import os
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+load_dotenv()
 
 from rest_framework import serializers, viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -111,13 +114,13 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         return new_date.strftime('%Y-%m-%d')
 
     def encrypt_number(self, number):
-        key = 'L5Qyf_JgpV0Ss0xe-BDkazxWXePGGL-r9spywYt_PDM='
+        key = os.environ.get("SECRET_KEY")
         fernet = Fernet(key.encode())
         encrypt_number = fernet.encrypt(number.encode())
         return encrypt_number.decode()
 
     def decrypt_number(self, number):
-        key = 'L5Qyf_JgpV0Ss0xe-BDkazxWXePGGL-r9spywYt_PDM='
+        key = os.environ.get("SECRET_KEY")
         fernet = Fernet(key.encode())
         encrypt_number = fernet.decrypt(number).decode()
         return encrypt_number
