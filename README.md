@@ -20,6 +20,7 @@ Windows
         python -m venv venv
     
         venv\Scripts\activate
+        
 3 - Intall python dependencies from requirements.txt.
 
 Linux
@@ -30,7 +31,21 @@ Windows
 
         pip install -r requirements.txt
     
-4 - Excute migrations.
+4 - Create a secret key with the following command.
+        
+Linux
+        
+        python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+
+Windows
+        
+        python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+        
+5 - create your .env file in root folder with your secret key generated before
+
+        SECRET_KEY={YOUR-SECRET-KEY}
+
+6 - Excute migrations.
 
 Linux
 
@@ -40,7 +55,7 @@ Windows
         
         python manage.py migrate
 
-5 - Create a superuser.
+7 - Create a superuser.
 
 Linux
 
@@ -50,7 +65,7 @@ Windows
 
         python manage.py createsuperuser
         
-6 - Run the project.
+8 - Run the project.
 
 Linux
         
@@ -60,7 +75,7 @@ Windows
      
         python manage.py runserver 0.0.0.0:8000
 
-7 - Create API Token.
+9 - Create API Token.
 
 - Enter in the root link
 - Login with your created user
