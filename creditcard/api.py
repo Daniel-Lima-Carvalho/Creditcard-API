@@ -25,6 +25,11 @@ class CreditcardSerializer(serializers.ModelSerializer):
         if len(value) < 2:
             raise serializers.ValidationError("holder must have 2 or more characters")
         return value
+    
+    def validate_cvv(self, value):
+        if len(str(value)) != 3 and len(str(value)) != 4:
+            raise serializers.ValidationError("cvv must have 3 or 4 characters")
+        return value
 
 class CreditcardViewSet(viewsets.ModelViewSet):
     queryset = Creditcard.objects.all()
