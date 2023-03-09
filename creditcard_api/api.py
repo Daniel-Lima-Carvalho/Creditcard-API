@@ -1,5 +1,6 @@
 
 from datetime import datetime, timedelta
+from cryptography.fernet import Fernet
 
 from rest_framework import serializers, viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -19,7 +20,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CreditcardSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['exp_date', 'holder', 'number', 'cvv', 'brand']
+        fields = ['exp_date', 'holder', 'number', 'cvv', 'brand', 'id']
         model = Creditcard
     
     def validate_holder(self, value):
@@ -50,6 +51,15 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         'message':'' 
     }
 
+    def list(self, request):
+        queryset = self.get_queryset()
+        
+        for cc in queryset:
+            cc.number = self.decrypt_number(cc.number)
+        
+        serializer = CreditcardSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         data = request.data
         
@@ -68,6 +78,8 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
         
+        data['number'] = self.encrypt_number(data['number'])
+
         serializer.create(data)
         self.result['message'] = 'Creditcard created successfully!'
 
@@ -97,6 +109,18 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         new_date = next_month - timedelta(days=next_month.day)
      
         return new_date.strftime('%Y-%m-%d')
+
+    def encrypt_number(self, number):
+        key = 'L5Qyf_JgpV0Ss0xe-BDkazxWXePGGL-r9spywYt_PDM='
+        fernet = Fernet(key.encode())
+        encrypt_number = fernet.encrypt(number.encode())
+        return encrypt_number.decode()
+
+    def decrypt_number(self, number):
+        key = 'L5Qyf_JgpV0Ss0xe-BDkazxWXePGGL-r9spywYt_PDM='
+        fernet = Fernet(key.encode())
+        encrypt_number = fernet.decrypt(number).decode()
+        return encrypt_number
     
 
     
