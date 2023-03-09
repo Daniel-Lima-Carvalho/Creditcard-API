@@ -41,7 +41,7 @@ Windows
         
         python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
         
-5 - create your .env file in root folder with your secret key generated before
+5 - Create your .env file in root folder with your secret key generated before
 
         SECRET_KEY={YOUR-SECRET-KEY}
 
