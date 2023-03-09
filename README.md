@@ -1,6 +1,10 @@
 # Creditcard-API
 Creditcard API
 
+## How do I get set up?
+
+1 - Pull the project to your local machine and open the terminal in the project root folder.</br>
+
 ## 🟢 GET - List creditcards
 
 ###### Request Path
