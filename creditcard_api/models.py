@@ -7,7 +7,7 @@ class Creditcard(models.Model):
     holder = models.CharField(max_length=500, verbose_name=_('holder'))
     number = models.CharField(max_length=500, verbose_name=_('number'))
     cvv = models.IntegerField(null=True, verbose_name=_('cvv'))
-    brand = models.CharField(max_length=100, verbose_name=_('brand'))
+    brand = models.CharField(null=True, max_length=100, verbose_name=_('brand'))
 
     def __str__(self):
         return f'{self.number} - {self.holder}'

@@ -79,12 +79,16 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         
         data['exp_date'] = self.transform_date_field(data['exp_date'])
 
-        cc = CreditCardValidator(data['number'])
-        data['brand'] = cc.get_brand()
-
         serializer = CreditcardSerializer(data=data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
+        
+        try:
+            data['brand'] = self.get_brand(data['number'])
+        except Exception as error_validation_message:
+            self.result['success'] = False
+            self.result['message'] = str(error_validation_message)
+            return Response(self.result, status=400)
         
         data['number'] = self.encrypt_number(data['number'])
 
@@ -92,6 +96,10 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         self.result['message'] = 'Creditcard created successfully!'
 
         return Response(self.result, status=201)
+
+    def get_brand(self, card_number):
+        cc = CreditCardValidator(card_number)
+        return cc.get_brand()
 
     def check_if_date_is_valid(self, date_text):
         try:
