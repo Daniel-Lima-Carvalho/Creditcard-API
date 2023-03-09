@@ -1,5 +1,5 @@
 from django.contrib import admin
-from creditcard.models import Creditcard
+from creditcard_api.models import Creditcard
 
 @admin.register(Creditcard)
 class CreditcardAdmin(admin.ModelAdmin):

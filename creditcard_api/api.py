@@ -1,15 +1,14 @@
 
 from datetime import datetime, timedelta
 
-from django.http import JsonResponse
-
 from rest_framework import serializers, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import permissions
 from rest_framework.response import Response
 
+from creditcard_api.models import Creditcard
 
-from creditcard.models import Creditcard
+from creditcard import CreditCard as CreditCardValidator
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 50
@@ -30,6 +29,12 @@ class CreditcardSerializer(serializers.ModelSerializer):
         if len(str(value)) != 3 and len(str(value)) != 4:
             raise serializers.ValidationError("cvv must have 3 or 4 characters")
         return value
+
+    def validate_number(self, value):
+        if len(str(value)) != 3 and len(str(value)) != 4:
+            raise serializers.ValidationError("cvv must have 3 or 4 characters")
+        return value
+
 
 class CreditcardViewSet(viewsets.ModelViewSet):
     queryset = Creditcard.objects.all()

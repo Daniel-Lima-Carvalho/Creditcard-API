@@ -4,7 +4,7 @@ from django.views.generic.base import RedirectView
 
 from rest_framework.routers import DefaultRouter
 
-from creditcard.api import CreditcardViewSet
+from creditcard_api.api import CreditcardViewSet
 
 router = DefaultRouter()
 router.register(r'creditcards', CreditcardViewSet)
