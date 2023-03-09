@@ -166,3 +166,7 @@ Windows
     "message": "Creditcard created successfully!"
 }
 ```
+
+## How to run tests?
+
+        python manage.py test
