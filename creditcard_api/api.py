@@ -42,7 +42,6 @@ class CreditcardSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("card number is not valid")
         return value
 
-
 class CreditcardViewSet(viewsets.ModelViewSet):
     queryset = Creditcard.objects.all()
     serializer_class = CreditcardSerializer
@@ -53,6 +52,12 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         'success': True, 
         'message':'' 
     }
+
+    def retrieve(self, request, pk=None):
+        creditcard = Creditcard.objects.get(id=pk)
+        creditcard.number = self.decrypt_number(creditcard.number)
+        serializer = CreditcardSerializer(creditcard)
+        return Response(serializer.data)
 
     def list(self, request):
         queryset = self.get_queryset()
