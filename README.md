@@ -13,7 +13,7 @@ Creditcard API
 ###### Response Example
 ```
 {
-    "count": 4,
+    "count": 2,
     "next": null,
     "previous": null,
     "results": [
