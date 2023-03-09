@@ -20,16 +20,6 @@ class CreditcardSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['exp_date', 'holder', 'number', 'cvv']
         model = Creditcard
-    
-    '''def validate_exp_date(self, value):
-        if len(value) > 2 :
-            raise serializers.ValidationError("exp_date is invalid")
-        return value'''
-
-    def validate_holder(self, value):
-        if len(value) > 2 :
-            raise serializers.ValidationError("holder is invalid")
-        return value
 
 class CreditcardViewSet(viewsets.ModelViewSet):
     queryset = Creditcard.objects.all()
@@ -40,10 +30,23 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         'success': True, 
         'message':'' 
     }
+
+    def normalize_date(self, date):
+        return date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     
+    def check_if_date_is_lower_than_today(self, input_date, today):
+        input_date = self.normalize_date(input_date)
+        today = self.normalize_date(today)
+
+        if input_date < today:
+            raise Exception("exp_date can't be lower than today's date")
+
+
     def check_if_date_is_valid(self, date_text):
         try:
-            datetime.strptime(date_text, '%m/%Y')
+            input_date = datetime.strptime(date_text, '%m/%Y')
+            today = datetime.now()
+            self.check_if_date_is_lower_than_today(input_date, today)
         except Exception as error:
             return str(error)
             
@@ -55,5 +58,3 @@ class CreditcardViewSet(viewsets.ModelViewSet):
             self.result['success'] = False
             self.result['message'] = error_validation_message
             return Response(self.result, status=400)
-
-        
