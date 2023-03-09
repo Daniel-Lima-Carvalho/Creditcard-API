@@ -17,7 +17,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CreditcardSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['exp_date', 'holder', 'number', 'cvv']
+        fields = ['exp_date', 'holder', 'number', 'cvv', 'brand']
         model = Creditcard
     
     def validate_holder(self, value):
@@ -58,6 +58,9 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         
         data['exp_date'] = self.transform_date_field(data['exp_date'])
 
+        cc = CreditCardValidator(data['number'])
+        data['brand'] = cc.get_brand()
+
         serializer = CreditcardSerializer(data=data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
@@ -91,4 +94,6 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         new_date = next_month - timedelta(days=next_month.day)
      
         return new_date.strftime('%Y-%m-%d')
+    
+
     
