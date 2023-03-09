@@ -20,6 +20,11 @@ class CreditcardSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['exp_date', 'holder', 'number', 'cvv']
         model = Creditcard
+    
+    def validate_holder(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError("holder must have 2 or more characters")
+        return value
 
 class CreditcardViewSet(viewsets.ModelViewSet):
     queryset = Creditcard.objects.all()
