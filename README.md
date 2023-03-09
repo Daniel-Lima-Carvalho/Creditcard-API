@@ -1,7 +1,7 @@
 # Creditcard-API
 Creditcard API
 
-## 🟢 GET - List all creditcards
+## 🟢 GET - List creditcards
 
 ###### Request Path
 ```
@@ -41,7 +41,7 @@ Creditcard API
 
 ###### Request Path
 ```
-api/creditcards/1
+/api/creditcards/1
 ```
 ###### Request Headers
 `Authorization` Token **{token}**
@@ -55,5 +55,31 @@ api/creditcards/1
     "cvv": 123,
     "brand": "visa",
     "id": 1
+}
+```
+
+## 🟡 POST - Create creditcard 
+
+###### Request Path
+```
+/api/creditcards/
+```
+###### Request Headers
+`Authorization` Token **{token}**
+
+###### Request Body Example
+```
+{
+    "exp_date": "04/2023",
+    "holder": "Fulano",
+    "number": "4593840058437546",
+    "cvv": "123"
+}
+```
+###### Response Example
+```
+{
+    "success": true,
+    "message": "Creditcard created successfully!"
 }
 ```
