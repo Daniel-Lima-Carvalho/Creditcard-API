@@ -31,31 +31,6 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         'message':'' 
     }
 
-    def normalize_date(self, date):
-        return date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    
-    def check_if_date_is_lower_than_today(self, input_date, today):
-        input_date = self.normalize_date(input_date)
-        today = self.normalize_date(today)
-
-        if input_date < today:
-            raise Exception("exp_date can't be lower than today's date")
-
-    def check_if_date_is_valid(self, date_text):
-        try:
-            input_date = datetime.strptime(date_text, '%m/%Y')
-            today = datetime.now()
-            self.check_if_date_is_lower_than_today(input_date, today)
-        except Exception as error:
-            return str(error)
-            
-    def transform_date_field(self, date_text):
-        input_date = datetime.strptime(date_text, '%m/%Y')
-        next_month = input_date.replace(day=28) + timedelta(days=4)
-        new_date = next_month - timedelta(days=next_month.day)
-     
-        return new_date.strftime('%Y-%m-%d')
-
     def create(self, request):
         data = request.data
         
@@ -75,3 +50,29 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         self.result['message'] = 'Creditcard created successfully!'
 
         return Response(self.result, status=201)
+
+    def check_if_date_is_valid(self, date_text):
+        try:
+            input_date = datetime.strptime(date_text, '%m/%Y')
+            today = datetime.now()
+            self.check_if_date_is_lower_than_today(input_date, today)
+        except Exception as error:
+            return str(error)
+    
+    def check_if_date_is_lower_than_today(self, input_date, today):
+        input_date = self.normalize_date(input_date)
+        today = self.normalize_date(today)
+
+        if input_date < today:
+            raise Exception("exp_date can't be lower than today's date")
+    
+    def normalize_date(self, date):
+        return date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    def transform_date_field(self, date_text):
+        input_date = datetime.strptime(date_text, '%m/%Y')
+        next_month = input_date.replace(day=28) + timedelta(days=4)
+        new_date = next_month - timedelta(days=next_month.day)
+     
+        return new_date.strftime('%Y-%m-%d')
+    
