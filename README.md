@@ -5,6 +5,62 @@ Creditcard API
 
 1 - Pull the project to your local machine and open the terminal in the project root folder.</br>
 
+2 - Create a virtual environment in the project root and activate it.
+
+Linux
+        
+        apt-get install python3-venv
+        
+        python3 -m venv venv
+        
+        source venv/bin/activate
+
+Windows
+
+        python -m venv venv
+    
+        venv\Scripts\activate
+3 - Intall python dependencies from requirements.txt.
+
+Linux
+        
+        pip3 install -r requirements.txt
+
+Windows
+
+        pip install -r requirements.txt
+    
+4 - Excute migrations.
+
+Linux
+
+        python3 manage.py migrate
+
+Windows 
+        
+        python manage.py migrate
+
+5 - Create a superuser.
+
+Linux
+
+        python3 manage.py createsuperuser
+
+Windows       
+
+        python manage.py createsuperuser
+        
+6 - Run the project.
+
+Linux
+        
+        python3 manage.py runserver 0.0.0.0:8000
+  
+Windows
+     
+        python manage.py runserver 0.0.0.0:8000
+        
+
 ## 🟢 GET - List creditcards
 
 ###### Request Path
