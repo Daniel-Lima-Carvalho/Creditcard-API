@@ -31,8 +31,9 @@ class CreditcardSerializer(serializers.ModelSerializer):
         return value
 
     def validate_number(self, value):
-        if len(str(value)) != 3 and len(str(value)) != 4:
-            raise serializers.ValidationError("cvv must have 3 or 4 characters")
+        cc = CreditCardValidator(value)
+        if not cc.is_valid():
+            raise serializers.ValidationError("card number is not valid")
         return value
 
 
