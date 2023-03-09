@@ -66,7 +66,9 @@ Windows
 - Login with your created user
 - Go to AUTH TOKEN > Tokens > ADD TOKEN
 - Choose the user and created your API Token
-        
+
+## How do I use the API?
+
 ## 🟢 GET - List creditcards
 
 ###### Request Path
