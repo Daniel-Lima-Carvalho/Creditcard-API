@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.http import JsonResponse
 
@@ -41,7 +41,6 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         if input_date < today:
             raise Exception("exp_date can't be lower than today's date")
 
-
     def check_if_date_is_valid(self, date_text):
         try:
             input_date = datetime.strptime(date_text, '%m/%Y')
@@ -50,6 +49,13 @@ class CreditcardViewSet(viewsets.ModelViewSet):
         except Exception as error:
             return str(error)
             
+    def transform_date_field(self, date_text):
+        input_date = datetime.strptime(date_text, '%m/%Y')
+        next_month = input_date.replace(day=28) + timedelta(days=4)
+        new_date = next_month - timedelta(days=next_month.day)
+     
+        return new_date.strftime('%Y-%m-%d')
+
     def create(self, request):
         data = request.data
         
@@ -58,3 +64,14 @@ class CreditcardViewSet(viewsets.ModelViewSet):
             self.result['success'] = False
             self.result['message'] = error_validation_message
             return Response(self.result, status=400)
+        
+        data['exp_date'] = self.transform_date_field(data['exp_date'])
+
+        serializer = CreditcardSerializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+        
+        serializer.create(data)
+        self.result['message'] = 'Creditcard created successfully!'
+
+        return Response(self.result, status=201)
